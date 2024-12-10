@@ -1,51 +1,39 @@
 import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-
-// PrimeNG
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { Avatar } from 'primeng/avatar';
+import { Badge } from 'primeng/badge';
+import { Button } from 'primeng/button';
+import { Drawer } from 'primeng/drawer';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { Ripple } from 'primeng/ripple';
-import { SplitButton } from 'primeng/splitbutton';
+import { InputText } from 'primeng/inputtext';
+import { Menu } from 'primeng/menu';
 import { StyleClass } from 'primeng/styleclass';
 import { Toolbar } from 'primeng/toolbar';
-import { Menu } from 'primeng/menu';
-import { Badge } from 'primeng/badge';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-topbar',
   standalone: true,
   imports: [
-    RouterOutlet,
-    DrawerModule,
-    ButtonModule,
-    Ripple,
-    AvatarModule,
-    StyleClass,
+    Button,
     Toolbar,
-    SplitButton,
     IconField,
     InputIcon,
-    InputTextModule,
     Menu,
-    Badge
+    Badge,
+    Avatar,
+    InputText,
+    Drawer,
+    StyleClass
   ],
-  templateUrl: './app.component.html',
+  templateUrl: './topbar.component.html',
 })
-export class AppComponent {
-  title = 'dulcemania-app';
+export class TopbarComponent {
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
     closeCallback(e:any): void {
         this.drawerRef.close(e);
     }
-
-    visible: boolean = false;
-
     items: MenuItem[] | undefined;
 
     ngOnInit() {
@@ -69,9 +57,11 @@ export class AppComponent {
         ];
     }
 
+    visible: boolean = false;
+
     toggleDarkMode() {
       const element = document.querySelector('html');
       console.log(element);
       element?.classList.toggle('dark');
-  }
+    }
 }
