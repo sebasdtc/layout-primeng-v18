@@ -1,0 +1,57 @@
+<li>
+  @if (item().separator && item().items) {
+    <div class="uppercase text-sm my-4">
+      {{item().label}}
+    </div>
+    @for (subitem of item().items; track $index) {
+      <app-menuitem [item]="subitem"/>
+    }
+  }
+  @else{
+
+    @if (!item().items) {
+      <a
+        pRipple
+        [routerLink]="item().routerLink"
+        routerLinkActive="active"
+        class="flex items-center
+        cursor-pointer p-4 rounded-border text-surface-700
+        dark:text-surface-100 hover:bg-surface-100
+        dark:hover:bg-surface-700 duration-150
+        transition-colors p-ripple">
+          <i class="mr-2 pi" [ngClass]="item().icon"></i>
+          <span class="font-medium">{{item().label}}</span>
+      </a>
+    }
+
+    <!-- pStyleClass="@next"
+    enterFromClass="hidden"
+    enterActiveClass="animate-slidedown"
+    leaveToClass="hidden"
+    leaveActiveClass="animate-slideup" -->
+
+    @if (item().items) {
+      <a
+        pRipple
+        class="flex items-center
+        cursor-pointer p-4 rounded-border text-surface-700
+        dark:text-surface-100 hover:bg-surface-100
+        dark:hover:bg-surface-700 duration-150
+        transition-colors p-ripple"
+        (click)="toggleMenu()">
+          <i class="mr-2 pi" [ngClass]="item().icon"></i>
+          <span class="font-medium">{{item().label}}</span>
+          <i class="pi ml-auto" [ngClass]="toggleVisibility ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+      </a>
+    }
+
+    @if(item().items && toggleVisibility) {
+      @for (subitem of item().items; track $index) {
+        <div class="ml-4">
+          <app-menuitem [item]="subitem"/>
+        </div>
+      }
+    }
+  }
+
+</li>

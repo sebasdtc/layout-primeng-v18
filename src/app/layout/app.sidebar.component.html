@@ -1,57 +1,4 @@
-<p-toolbar class="w-full fixed top-0">
-  <ng-template #start>
-    <div class="flex items-center gap-8 px-4">
-      <p-button (click)="visible = true" icon="pi pi-bars" [rounded]="true" [text]="true"
-      severity="secondary"/>
-      <p-iconfield iconPosition="left">
-        <p-inputicon styleClass="pi pi-search" />
-        <input type="text" pInputText placeholder="Search" />
-    </p-iconfield>
-    </div>
-  </ng-template>
-  <ng-template #end>
-    <p-button icon="pi pi-moon" [rounded]="true" [text]="true"
-      severity="secondary"
-      (click)="toggleDarkMode()"></p-button>
-    <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
-      severity="secondary"
-    (click)="menu.toggle($event)"></p-button>
-    <div class="card">
-      <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60"
-      [popup]="true" #menu>
-          <ng-template #submenuheader let-item>
-              <span class="text-primary font-bold">{{ item.label }}</span>
-          </ng-template>
-          <ng-template #item let-item>
-              <a pRipple class="flex items-center p-menu-item-link">
-                  <span [class]="item.icon"></span>
-                  <span class="ml-2">{{ item.label }}</span>
-                  @if (item.badge) {
-                    <p-badge class="ml-auto" [value]="item.badge" />
-                  }
-              </a>
-          </ng-template>
-
-          <ng-template #end>
-              <button pRipple
-              class="relative overflow-hidden
-              w-full border-0 bg-transparent
-              flex items-start p-2 pl-4
-              hover:bg-surface-100 dark:hover:bg-surface-800
-              rounded-none cursor-pointer
-              transition-colors duration-200">
-                  <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />
-                  <span class="inline-flex flex-col">
-                      <span class="font-bold">Amy Elsner</span>
-                      <span class="text-sm">Admin</span>
-                  </span>
-              </button>
-          </ng-template>
-      </p-menu>
-  </div>
-  </ng-template>
-</p-toolbar>
-<p-drawer #drawerRef [(visible)]="visible">
+<p-drawer #drawerRef [(visible)]="_layoutService.isOpen$">
   <ng-template #headless>
       <div class="flex flex-col h-full">
           <div class="flex items-center justify-between px-6 pt-4 shrink-0">
@@ -70,7 +17,15 @@
               </p-button>
             </span>
           </div>
-          <div class="overflow-y-auto">
+
+          <div class="overflow-y-auto px-4 pt-4">
+            <app-menu />
+          </div>
+
+
+
+
+          <!-- <div class="overflow-y-auto">
               <ul class="list-none p-4 m-0">
                   <li>
                       <div
@@ -214,7 +169,7 @@
                       </ul>
                   </li>
               </ul>
-          </div>
+          </div> -->
       </div>
   </ng-template>
 </p-drawer>
