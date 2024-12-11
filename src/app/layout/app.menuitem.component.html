@@ -3,8 +3,8 @@
     <div class="uppercase text-sm my-4">
       {{item().label}}
     </div>
-    @for (subitem of item().items; track $index) {
-      <app-menuitem [item]="subitem"/>
+    @for (subitem of item().items; track $index; let i = $index) {
+      <app-menuitem [item]="subitem" [index]="i"/>
     }
   }
   @else{
@@ -13,7 +13,7 @@
       <a
         pRipple
         [routerLink]="item().routerLink"
-        routerLinkActive="active"
+        routerLinkActive="font-bold text-primary"
         class="flex items-center
         cursor-pointer p-4 rounded-border text-surface-700
         dark:text-surface-100 hover:bg-surface-100
@@ -24,12 +24,6 @@
       </a>
     }
 
-    <!-- pStyleClass="@next"
-    enterFromClass="hidden"
-    enterActiveClass="animate-slidedown"
-    leaveToClass="hidden"
-    leaveActiveClass="animate-slideup" -->
-
     @if (item().items) {
       <a
         pRipple
@@ -38,17 +32,17 @@
         dark:text-surface-100 hover:bg-surface-100
         dark:hover:bg-surface-700 duration-150
         transition-colors p-ripple"
-        (click)="toggleMenu()">
+        (click)="itemClick($event)">
           <i class="mr-2 pi" [ngClass]="item().icon"></i>
           <span class="font-medium">{{item().label}}</span>
-          <i class="pi ml-auto" [ngClass]="toggleVisibility ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+          <i class="pi ml-auto" [ngClass]="active ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
       </a>
     }
 
-    @if(item().items && toggleVisibility) {
-      @for (subitem of item().items; track $index) {
+    @if(item().items && active) {
+      @for (subitem of item().items; track $index; let i = $index) {
         <div class="ml-4">
-          <app-menuitem [item]="subitem"/>
+          <app-menuitem [item]="subitem" [index]="i" [parentKey]="key"/>
         </div>
       }
     }
