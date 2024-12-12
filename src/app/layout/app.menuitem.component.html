@@ -9,7 +9,7 @@
   }
   @else{
 
-    @if (!item().items && item().routerLink) {
+    @if (!item().items) {
       <a
         pRipple
         [routerLink]="item().routerLink" routerLinkActive="!font-bold !text-primary-500"

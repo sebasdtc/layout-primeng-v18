@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MenuStateService } from './services/menu.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { LayoutService } from './services/layout.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-menuitem',
@@ -20,7 +21,7 @@ export class MenuitemComponent {
   active = false;
 
   // signal
-  item = input.required<any>();
+  item = input.required<MenuItem>();
   index = input.required<number>();
   parentKey = input();
   key: string = "";
@@ -97,7 +98,10 @@ export class MenuitemComponent {
     }
 
     this._menuService.onMenuStateChange({ key: this.key });
-    this._layoutService.toggleDrawer();
+
+    if(this.item().routerLink) {
+      this._layoutService.toggleDrawer();
+    }
   }
 
   ngOnDestroy() {
