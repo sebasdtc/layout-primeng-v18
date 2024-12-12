@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, model } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { Component, inject, input } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { MenuStateService } from './services/menu.service';
+import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { LayoutService } from './services/layout.service';
 
 @Component({
   selector: 'app-menuitem',
@@ -19,24 +20,27 @@ export class MenuitemComponent {
   active = false;
 
   // signal
-  item = input.required<MenuItem>();
+  item = input.required<any>();
   index = input.required<number>();
-  key = model<string>();
   parentKey = input();
+  key: string = "";
 
   // suscribciones
   menuSourceSubscription: Subscription |undefined;
   menuResetSubscription: Subscription | undefined;
+
+  _layoutService = inject(LayoutService);
   _menuService = inject(MenuStateService)
+  _router = inject(Router);
 
   constructor() {
     this.menuSourceSubscription = this._menuService.menuSource$.subscribe(value => {
         Promise.resolve(null).then(() => {
             if (value.routeEvent) {
-                this.active = (value.key === this.key() || value.key.startsWith(this.key + '-')) ? true : false;
+                this.active = (value.key === this.key || value.key.startsWith(this.key + '-')) ? true : false;
             }
             else {
-                if (value.key !== this.key() && !value.key.startsWith(this.key + '-')) {
+                if (value.key !== this.key && !value.key.startsWith(this.key + '-')) {
                     this.active = false;
                 }
             }
@@ -47,32 +51,44 @@ export class MenuitemComponent {
         this.active = false;
     });
 
-    // this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-    //     .subscribe(params => {
-    //         if (this.item.routerLink) {
-    //             this.updateActiveStateFromRoute();
-    //         }
-    //     });
+
+    this._router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(params => {
+        if (this.item().routerLink) {
+          this.updateActiveStateFromRoute();
+        }
+    });
+
   }
 
   ngOnInit() {
-      const k = this.parentKey() ? this.parentKey() + '-' + this.index() : String(this.index);
-      this.key.set(k);
-      // if (this.item.routerLink) {
-      //     this.updateActiveStateFromRoute();
-      // }
+    this.key = this.parentKey() ? this.parentKey() + '-' + this.index() : String(this.index);
+
+    if (this.item().routerLink) {
+        this.updateActiveStateFromRoute();
+    }
+
   }
+
+  updateActiveStateFromRoute() {
+    let activeRoute = this._router.isActive(this.item().routerLink[0], { paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' });
+    if (activeRoute) {
+      this._menuService.onMenuStateChange({ key: this.key, routeEvent: true });
+    }
+  }
+
 
   itemClick(event: Event) {
     // avoid processing disabled items
     if (this.item().disabled) {
-        event.preventDefault();
-        return;
+      event.preventDefault();
+      return;
     }
 
     // execute command
-    if (this.item().command) {
-        // this.item().command({ originalEvent: event, item: this.item });
+    const command = this.item()?.command;
+    if (command) {
+      command({ originalEvent: event, item: this.item() });
     }
 
     // toggle active state
@@ -80,7 +96,8 @@ export class MenuitemComponent {
         this.active = !this.active;
     }
 
-    this._menuService.onMenuStateChange({ key: this.key()! });
+    this._menuService.onMenuStateChange({ key: this.key });
+    this._layoutService.toggleDrawer();
   }
 
   ngOnDestroy() {

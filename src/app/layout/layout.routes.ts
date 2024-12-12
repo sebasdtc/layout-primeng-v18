@@ -5,6 +5,10 @@ export const LAYOUT_ROUTES : Routes = [
   {
     path:'',
     component:LayoutComponent,
-    loadChildren: () => import('../admin/admin.routes').then(m => m.ADMIN_ROUTES)
+    children:[
+      {path:'', loadChildren: () => import('../admin/admin.routes').then(m => m.ADMIN_ROUTES)},
+      {path:'productos', loadChildren: () => import('../products/product.routes').then(m => m.PRODUCT_ROUTES)}
+
+    ]
   }
 ]
