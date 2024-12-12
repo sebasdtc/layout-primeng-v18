@@ -7,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 export class LayoutService {
 
   private isOpen = signal(false);
-  // Método para alternar el estado
 
   get isOpen$() {
     return this.isOpen;
@@ -16,14 +15,6 @@ export class LayoutService {
   toggleDrawer(): void {
     this.isOpen.update((value) => !value);
   }
-
-  constructor() { }
-
-  drawerVisible = false;
-
-  // toogleDrawer() {
-  //   this.drawerVisible = !this.drawerVisible;
-  // }
 
   toggleDarkMode() {
     const element = document.querySelector('html');

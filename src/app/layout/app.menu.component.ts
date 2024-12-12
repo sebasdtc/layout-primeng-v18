@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuitemComponent } from './app.menuitem.component';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-menu',
@@ -17,14 +16,14 @@ export class MenuComponent implements OnInit{
           label: 'Home',
           separator:true,
           items: [
-              { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+              { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard'] }
           ]
       },
       {
           label: 'UI Components',
           separator:true,
           items: [
-              { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
+              { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/productos/lista'] },
               { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
               { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
               { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
